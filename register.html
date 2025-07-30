@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>이음 - 사람을 잇다</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #7ECCC2;
+            --primary-light: #E5F6F4;
+            --primary-dark: #4A9A90;
+            --secondary-color: #333333;
+            --accent-color: #FFD600;
+            --gray-light: #F5F5F5;
+            --gray-medium: #DDDDDD;
+            --gray-dark: #999999;
+            --light-text: #777777;
+            --white: #FFFFFF;
+            --shadow-soft: 0 10px 30px rgba(126, 204, 194, 0.1);
+            --shadow-medium: 0 15px 35px rgba(126, 204, 194, 0.15);
+            --transition-fast: 0.2s ease;
+            --transition-normal: 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html, body {
+            height: 100%;
+            min-height: 100%;
+        }
+        
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            color: var(--secondary-color);
+            min-height: 100vh;
+            display: flex;
+            overflow-x: hidden;
+            height: 100%;
+            position: relative;
+        }
+        
+        .left-panel {
+            background-color: var(--primary-light);
+            width: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .left-panel-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .logo-container {
+            max-width: 300px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: var(--primary-light);
+            border-radius: 10px;
+            box-shadow: var(--shadow-soft);
+        }
+        
+        .logo {
+            width: 80%;
+            margin: 0 auto;
+            display: block;
+        }
+        
+        .brand-text {
+            margin-top: 20px;
+        }
+        
+        .brand-title {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--secondary-color);
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+        }
+        
+        .brand-subtitle {
+            font-size: 18px;
+            font-weight: 300;
+            color: var(--secondary-color);
+            letter-spacing: 1px;
+        }
+        
+        .right-panel {
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            background-color: var(--white);
+            padding-bottom: 80px; /* 푸터 공간 확보 */
+        }
+        
+        .register-container {
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .form-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 18px 15px;
+            border: 1px solid var(--primary-color);
+            border-radius: 6px;
+            font-family: 'Noto Sans KR', sans-serif;
+            font-size: 16px;
+            transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+            background-color: var(--white);
+            height: 56px;
+        }
+        
+        .form-control::placeholder {
+            color: var(--gray-dark);
+            opacity: 0.7;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-dark);
+            box-shadow: 0 0 0 3px rgba(126, 204, 194, 0.3);
+        }
+        
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237ECCC2' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 16px;
+            padding-right: 40px;
+            cursor: pointer;
+        }
+        
+        select.form-control:disabled {
+            background-color: var(--primary-light);
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+        
+        .register-options {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+        
+        .register-button {
+            width: 100%;
+            padding: 18px 15px;
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: none;
+            border-radius: 6px;
+            font-family: 'Noto Sans KR', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(126, 204, 194, 0.3);
+            height: 56px;
+        }
+        
+        .register-button:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(126, 204, 194, 0.4);
+        }
+        
+        .social-register {
+            width: 100%;
+            margin-top: 20px;
+        }
+        
+        .social-button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: none;
+            border-radius: 6px;
+            font-family: 'Noto Sans KR', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform var(--transition-normal);
+        }
+        
+        .social-button:hover {
+            transform: translateY(-2px);
+        }
+        
+        /* Footer - 다른 페이지와 일관된 스타일 */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 12px 0;
+            text-align: center;
+            font-size: 12px;
+            color: var(--light-text);
+            z-index: 10;
+            background-color: transparent;
+        }
+        
+        .footer p {
+            margin: 0;
+            font-weight: 300;
+        }
+        
+        /* 배경 장식 요소 */
+        .bg-circle {
+            position: absolute;
+            border-radius: 50%;
+            background: var(--primary-color);
+            opacity: 0.1;
+            z-index: 1;
+        }
+        
+        .bg-circle-1 {
+            width: 300px;
+            height: 300px;
+            top: -100px;
+            right: -50px;
+        }
+        
+        .bg-circle-2 {
+            width: 200px;
+            height: 200px;
+            bottom: -50px;
+            left: -50px;
+        }
+        
+        /* 반응형 스타일 */
+        @media screen and (max-width: 992px) {
+            .brand-title {
+                font-size: 30px;
+            }
+            
+            .form-title {
+                font-size: 24px;
+            }
+        }
+        
+        @media screen and (max-width: 768px) {
+            body {
+                flex-direction: column;
+                min-height: 100vh;
+            }
+            
+            .left-panel, .right-panel {
+                width: 100%;
+            }
+            
+            .left-panel {
+                min-height: 300px;
+                padding: 30px 20px;
+            }
+            
+            .right-panel {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                padding: 30px 20px;
+                padding-bottom: 60px; /* 모바일에서 푸터 공간 */
+            }
+            
+            .logo-container {
+                max-width: 250px;
+            }
+            
+            .form-title {
+                margin-bottom: 20px;
+            }
+            
+            .bg-circle-1 {
+                width: 200px;
+                height: 200px;
+            }
+            
+            .bg-circle-2 {
+                width: 150px;
+                height: 150px;
+            }
+        }
+        
+        @media screen and (max-width: 480px) {
+            .register-container {
+                max-width: 100%;
+                padding: 0 40px;
+            }
+            
+            .left-panel {
+                min-height: 250px;
+            }
+            
+            .right-panel {
+                padding-bottom: 60px;
+            }
+            
+            .logo-container {
+                max-width: 200px;
+            }
+            
+            .brand-title {
+                font-size: 26px;
+            }
+            
+            .brand-subtitle {
+                font-size: 14px;
+            }
+            
+            .form-title {
+                font-size: 22px;
+            }
+            
+            .form-control {
+                height: 50px;
+                padding: 15px;
+                font-size: 15px;
+            }
+            
+            .register-button {
+                height: 50px;
+                padding: 15px;
+                font-size: 15px;
+            }
+            
+            .register-options {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 왼쪽 패널 (로고와 브랜드) -->
+    <div class="left-panel">
+        <!-- 배경 원 장식 -->
+        <div class="bg-circle bg-circle-1"></div>
+        <div class="bg-circle bg-circle-2"></div>
+        
+        <!-- 로고와 브랜드 텍스트 -->
+        <div class="left-panel-content">
+            <div class="logo-container">
+                <img src="./image/symbol.png" alt="이음 로고" class="logo">
+                <div class="brand-text">
+                    <h1 class="brand-title">[ 이;음 ]</h1>
+                    <p class="brand-subtitle">사람을 잇다</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 오른쪽 패널 (로그인 폼) -->
+    <div class="right-panel">
+        <div class="register-container">
+            <h2 class="form-title"></h2>
+            
+            <!-- 로그인 폼 -->
+            <form action="/home-mentee.html">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="이름">
+                </div>
+                <div class="form-group">
+                    <input type="tel" class="form-control" placeholder="전화번호">
+                </div>
+                <div class="form-group">
+                    <input type="exam-id" class="form-control" placeholder="수험번호">
+                </div>
+                
+                <div class="form-group">
+                    <select id="jobCategory" class="form-control">
+                        <option value="" disabled selected>직군 선택</option>
+                        <option value="tech">과학기술</option>
+                        <option value="admin">행정</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <select id="jobPosition" class="form-control" disabled>
+                        <option value="" disabled selected>직류 선택</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="register-button">확인</button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Footer - 다른 페이지와 일관된 스타일 -->
+    <footer class="footer">
+        <p>&copy; 2025 이음. All rights reserved.</p>
+    </footer>
+    
+    <script>
+        // 직군에 따른 직류 옵션 설정
+        document.addEventListener('DOMContentLoaded', function() {
+            const jobCategorySelect = document.getElementById('jobCategory');
+            const jobPositionSelect = document.getElementById('jobPosition');
+            
+            // 직군 변경 시 직류 옵션 업데이트
+            jobCategorySelect.addEventListener('change', function() {
+                // 직류 선택 활성화
+                jobPositionSelect.disabled = false;
+                
+                // 기존 옵션 제거
+                while (jobPositionSelect.options.length > 1) {
+                    jobPositionSelect.remove(1);
+                }
+                
+                // 선택된 직군에 따라 직류 옵션 추가
+                const selectedCategory = this.value;
+                let positions = [];
+                
+                switch(selectedCategory) {
+                    case 'tech':
+                        positions = ['일반기계', '화공', '전기', '전자', '통신기술', '일반농업', '산림자원', '일반수산', '일반환경', '기상', '일반토목', '건축', '시설조경', '방재안전', '전산개발', '데이터', '정보보호'];
+                        break;
+                    case 'admin':
+                        positions = ['일반행정', '재경', '교육행정', '법무행정', '국제통상', '사회복지', '교정', '검찰', '출입국관리', '보호'];
+                        break;
+                }
+                
+                // 새 옵션 추가
+                positions.forEach(function(position) {
+                    const option = document.createElement('option');
+                    option.text = position;
+                    option.value = position.toLowerCase().replace(/\s+/g, '_');
+                    jobPositionSelect.add(option);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

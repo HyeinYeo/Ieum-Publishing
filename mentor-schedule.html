@@ -1,0 +1,2112 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>이음 - 사람을 잇다</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap');
+        
+        :root {
+            --primary-color: #7ECCC2;
+            --active-bg: #d8f2ef;
+            --secondary-color: #595959;
+            --light-bg: #E5F6F4;
+            --header-bg: #d8f2ef;
+            --accent-color: #FFD600;
+            --inactive-color: #e0e0e0;
+            --shadow: 0 5px 15px rgba(126, 204, 194, 0.1);
+            --card-shadow: 0 8px 16px rgba(126, 204, 194, 0.1);
+            --transition: all 0.25s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html, body {
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #ffffff;
+            position: relative;
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* Header */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 18px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            box-shadow: 0 1px 20px rgba(126, 204, 194, 0.1);
+            border-bottom: 1px solid rgba(126, 204, 194, 0.1);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+        
+        .logo::before {
+            content: '';
+            position: absolute;
+            left: -10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 35px;
+            background: linear-gradient(135deg, var(--primary-color), #5AB5A8);
+            border-radius: 2px;
+        }
+        
+        .logo-text {
+            font-size: 22px;
+            font-weight: 600;
+            background: linear-gradient(135deg, var(--primary-color), #5AB5A8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 0.5px;
+            margin-left: 10px;
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .nav-item {
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(126, 204, 194, 0.08);
+            border-radius: 12px;
+            border: 1px solid rgba(126, 204, 194, 0.15);
+            transition: var(--transition);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(126, 204, 194, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .nav-item:hover::before {
+            left: 100%;
+        }
+        
+        .nav-item:hover {
+            transform: translateY(-2px);
+            background: rgba(126, 204, 194, 0.15);
+            border-color: var(--primary-color);
+            box-shadow: 0 8px 25px rgba(126, 204, 194, 0.25);
+        }
+        
+        .nav-item:active {
+            transform: translateY(0);
+        }
+        
+        .nav-item img {
+            width: 24px;
+            height: 24px;
+            transition: var(--transition);
+            filter: grayscale(20%);
+        }
+        
+        .nav-item:hover img {
+            filter: grayscale(0%);
+            transform: scale(1.1);
+        }
+        
+        /* 햄버거 메뉴 */
+        .hamburger-menu {
+            display: none;
+            width: 32px;
+            height: 32px;
+            position: relative;
+            cursor: pointer;
+            z-index: 1001;
+            margin-left: auto;
+            padding: 4px;
+            border-radius: 8px;
+            background: rgba(126, 204, 194, 0.08);
+            border: 1px solid rgba(126, 204, 194, 0.15);
+            transition: var(--transition);
+        }
+        
+        .hamburger-menu:hover {
+            background: rgba(126, 204, 194, 0.15);
+            border-color: var(--primary-color);
+        }
+        
+        .hamburger-icon {
+            width: 20px;
+            height: 2px;
+            background: var(--primary-color);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transition: var(--transition);
+            border-radius: 1px;
+        }
+        
+        .hamburger-icon::before,
+        .hamburger-icon::after {
+            content: '';
+            width: 20px;
+            height: 2px;
+            background: var(--primary-color);
+            position: absolute;
+            transition: var(--transition);
+            border-radius: 1px;
+        }
+        
+        .hamburger-icon::before {
+            top: -6px;
+        }
+        
+        .hamburger-icon::after {
+            top: 6px;
+        }
+        
+        .hamburger-menu.active {
+            background: rgba(126, 204, 194, 0.2);
+        }
+        
+        .hamburger-menu.active .hamburger-icon {
+            background: transparent;
+        }
+        
+        .hamburger-menu.active .hamburger-icon::before {
+            transform: rotate(45deg);
+            top: 0;
+        }
+        
+        .hamburger-menu.active .hamburger-icon::after {
+            transform: rotate(-45deg);
+            top: 0;
+        }
+        
+        /* Main Layout */
+        .main-layout {
+            display: flex;
+            height: 100vh;
+            padding-top: 85px;
+            padding-bottom: 0;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 300px;
+            background: var(--light-bg);
+            border-right: 1px solid rgba(126, 204, 194, 0.2);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+        
+        .sidebar-header {
+            padding: 25px 20px;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(126, 204, 194, 0.8), rgba(90, 181, 168, 0.9));
+            color: white;
+            font-size: 16px;
+            font-weight: 500;
+            border-radius: 0 0 15px 0;
+            box-shadow: 0 2px 8px rgba(126, 204, 194, 0.2);
+        }
+        
+        .sidebar-period {
+            font-size: 14px;
+            margin-top: 5px;
+            opacity: 0.9;
+        }
+        
+        .sidebar-menu {
+            flex: 1;
+            padding: 0;
+        }
+        
+        .sidebar-item {
+            display: block;
+            padding: 20px 25px;
+            color: var(--secondary-color);
+            text-decoration: none;
+            border-bottom: 1px solid rgba(126, 204, 194, 0.1);
+            transition: var(--transition);
+            font-size: 15px;
+            font-weight: 500;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .sidebar-item:hover {
+            background: rgba(126, 204, 194, 0.1);
+            color: var(--primary-color);
+            padding-left: 35px;
+        }
+        
+        .sidebar-item.active {
+            background: var(--active-bg);
+            color: var(--primary-color);
+            font-weight: 600;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .sidebar-item::before {
+            content: '';
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 6px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            opacity: 0;
+            transition: var(--transition);
+        }
+        
+        .sidebar-item.active::before {
+            opacity: 1;
+        }
+        
+        /* Content Area */
+        .content-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: #f8f9fa;
+            padding: 30px;
+            padding-bottom: 0px;
+            overflow-y: auto;
+            height: calc(100vh - 85px);
+        }
+        
+        .content-header {
+            text-align: center;
+            margin-bottom: 5px;
+            flex-shrink: 0;
+        }
+        
+        .page-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--secondary-color);
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+        
+        /* Day Tabs */
+        .day-tabs {
+            display: flex;
+            background: white;
+            border-radius: 12px 12px 0 0;
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            margin-bottom: 0;
+        }
+        
+        .day-tab {
+            flex: 1;
+            padding: 10px 8px;
+            text-align: center;
+            cursor: pointer;
+            background: #f8f9fa;
+            border-right: 1px solid rgba(126, 204, 194, 0.1);
+            transition: var(--transition);
+            font-weight: 500;
+            color: var(--secondary-color);
+            position: relative;
+        }
+        
+        .day-tab:last-child {
+            border-right: none;
+        }
+        
+        .day-tab:hover {
+            background: rgba(126, 204, 194, 0.05);
+        }
+        
+        .day-tab.active {
+            background: var(--primary-color);
+            color: white;
+            font-weight: 600;
+        }
+        
+        .day-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: white;
+        }
+        
+        /* Schedule Container */
+        .schedule-container {
+            background: white;
+            border-radius: 0 0 12px 12px;
+            box-shadow: var(--card-shadow);
+            overflow: auto;
+            flex: 1;
+            min-height: 0;
+            margin-bottom: 60px;
+        }
+        
+        .day-content {
+            display: none;
+        }
+        
+        .day-content.active {
+            display: block;
+        }
+        
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            min-width: 800px;
+            table-layout: fixed;
+        }
+        
+        .schedule-table th {
+            background: var(--light-bg);
+            color: var(--secondary-color);
+            padding: 8px 4px;
+            text-align: center;
+            font-weight: 600;
+            border: 1px solid rgba(126, 204, 194, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .schedule-table th:first-child {
+            width: 90px;
+        }
+        
+        .schedule-table th:not(:first-child) {
+            width: calc((100% - 90px) / 6);
+        }
+        
+        .schedule-table td {
+            padding: 4px 3px;
+            text-align: center;
+            border: 1px solid #ddd;
+            vertical-align: middle;
+            position: relative;
+            height: 45px;
+            width: auto;
+        }
+        
+        .time-cell {
+            background: #f8f9fa;
+            font-weight: 500;
+            color: var(--secondary-color);
+            width: 90px;
+            font-size: 10px;
+            position: sticky;
+            left: 0;
+            z-index: 5;
+            padding: 4px 2px;
+        }
+        
+        .schedule-slot {
+            background: rgba(126, 204, 194, 0.3);
+            color: var(--secondary-color);
+            cursor: pointer;
+            transition: var(--transition);
+            border-radius: 3px;
+            margin: 1px;
+            padding: 4px 2px;
+            font-size: 9px;
+            line-height: 1.1;
+            height: calc(100% - 2px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 40px;
+            word-break: keep-all;
+            overflow: hidden;
+        }
+        
+        .schedule-slot.multi-hour {
+            font-size: 10px;
+            padding: 6px 3px;
+        }
+        
+        .schedule-slot:hover {
+            background: rgba(126, 204, 194, 0.5);
+            transform: scale(1.02);
+            box-shadow: 0 2px 8px rgba(126, 204, 194, 0.3);
+        }
+        
+        .mentor-name {
+            font-weight: 600;
+            margin-bottom: 1px;
+            font-size: 13px;
+        }
+        
+        .mentor-detail {
+            font-size: 11px;
+            opacity: 0.8;
+        }
+        
+        .multi-hour .mentor-name {
+            font-size: 13px;
+            margin-bottom: 2px;
+        }
+        
+        .multi-hour .mentor-detail {
+            font-size: 11px;
+        }
+        
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+        
+        .modal-overlay.active {
+            display: flex;
+        }
+        
+        .modal {
+            background: white;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 550px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            animation: modalSlideIn 0.3s ease;
+        }
+        
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        .modal-header {
+            background: var(--light-bg);
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(126, 204, 194, 0.2);
+        }
+        
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--secondary-color);
+        }
+        
+        .modal-close {
+            width: 30px;
+            height: 30px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--secondary-color);
+            transition: var(--transition);
+        }
+        
+        .modal-close:hover {
+            color: var(--primary-color);
+            transform: scale(1.1);
+        }
+        
+        .modal-content {
+            padding: 35px;
+        }
+        
+        .modal-info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .modal-info-row:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        
+        .modal-info-label {
+            /* background: #f0f0f0;
+            padding: 12px 15px;
+            width: 80px;
+            text-align: center;
+            font-weight: 600;
+            color: var(--secondary-color);
+            border-radius: 8px 0 0 8px; */
+
+            font-weight: 600;
+            color: var(--secondary-color);
+            font-size: 16px;
+            min-width: 80px;
+        }
+        
+        .modal-info-value {
+            /* background: white;
+            padding: 12px 15px;
+            flex: 1;
+            border: 1px solid #ddd;
+            border-left: none;
+            border-radius: 0 8px 8px 0; */
+            color: var(--text-color);
+            font-size: 16px;
+            text-align: right;
+            flex: 1;
+            margin-left: 20px;
+        }
+        
+        .modal-description {
+            margin-top: 20px;
+        }
+        
+        .modal-description-label {
+            background: #f0f0f0;
+            padding: 12px 15px;
+            font-weight: 600;
+            color: var(--secondary-color);
+            border-radius: 8px 8px 0 0;
+        }
+        
+        .modal-description-content {
+            background: white;
+            border: 1px solid #ddd;
+            border-top: none;
+            padding: 20px 15px;
+            min-height: 120px;
+            border-radius: 0 0 8px 8px;
+            color: var(--secondary-color);
+            line-height: 1.6;
+        }
+        
+        /* Footer */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 12px 0;
+            text-align: center;
+            font-size: 12px;
+            color: rgba(51, 51, 51, 0.7);
+            z-index: 10;
+            background-color: transparent;
+        }
+        
+        .footer p {
+            margin: 0;
+            font-weight: 300;
+        }
+
+        @media (max-width: 600px) {
+            .modal-info-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+                padding: 15px 0;
+            }
+            
+            .modal-info-value {
+                text-align: left;
+                margin-left: 0;
+            }
+        }
+        
+        /* Mobile Styles */
+        @media (max-width: 767px) {
+            header {
+                padding: 15px 5%;
+            }
+            
+            .logo::before {
+                width: 3px;
+                height: 30px;
+                left: -8px;
+            }
+            
+            .logo-text {
+                font-size: 20px;
+                margin-left: 8px;
+            }
+            
+            .nav-menu {
+                display: none;
+            }
+            
+            .hamburger-menu {
+                display: block;
+            }
+            
+            .main-layout {
+                flex-direction: column;
+                padding-top: 80px;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+                border-right: none;
+                border-bottom: 1px solid rgba(126, 204, 194, 0.2);
+            }
+            
+            .sidebar-header {
+                border-radius: 0;
+            }
+            
+            .content-area {
+                padding: 15px;
+                height: calc(100vh - 200px);
+            }
+            
+            .page-title {
+                font-size: 24px;
+                margin-bottom: 10px;
+            }
+            
+            .content-header {
+                margin-bottom: 10px;
+            }
+            
+            .day-tab {
+                padding: 10px 8px;      /* 기존 15px 10px → 10px 8px */
+                font-size: 13px;
+            }
+            
+            .schedule-table {
+                font-size: 9px;
+                min-width: 500px;
+            }
+            
+            .schedule-table th,
+            .schedule-table td {
+                padding: 4px 2px;
+                height: 35px;
+            }
+            
+            .time-cell {
+                width: 60px;
+                font-size: 8px;
+                padding: 4px 1px;
+            }
+            
+            .schedule-table th:first-child {
+                width: 60px;
+            }
+            
+            .schedule-table th:not(:first-child) {
+                width: calc((100% - 60px) / 6);
+            }
+            
+            .schedule-slot {
+                font-size: 7px;
+                padding: 2px 1px;
+            }
+            
+            .schedule-slot.multi-hour {
+                font-size: 8px;
+                padding: 3px 2px;
+            }
+            
+            .mentor-name {
+                font-size: 7px;
+            }
+            
+            .mentor-detail {
+                font-size: 6px;
+            }
+            
+            .multi-hour .mentor-name {
+                font-size: 8px;
+            }
+            
+            .multi-hour .mentor-detail {
+                font-size: 7px;
+            }
+            
+            .modal {
+                width: 95%;
+                margin: 20px;
+            }
+            
+            .modal-content {
+                padding: 20px;
+            }
+        }
+        
+        /* Mobile Navigation */
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 75%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 90px 25px 25px;
+            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
+            border-left: 1px solid rgba(126, 204, 194, 0.1);
+            transition: var(--transition);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        
+        .mobile-nav.active {
+            right: 0;
+        }
+        
+        .mobile-nav-item {
+            display: flex;
+            align-items: center;
+            padding: 18px 20px;
+            margin-bottom: 8px;
+            border-radius: 12px;
+            background: rgba(126, 204, 194, 0.05);
+            border: 1px solid rgba(126, 204, 194, 0.1);
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .mobile-nav-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--primary-color);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .mobile-nav-item:hover::before {
+            transform: scaleY(1);
+        }
+        
+        .mobile-nav-item:hover {
+            background: rgba(126, 204, 194, 0.1);
+            border-color: var(--primary-color);
+            transform: translateX(5px);
+        }
+        
+        .mobile-nav-item img {
+            width: 26px;
+            height: 26px;
+            margin-right: 15px;
+            transition: var(--transition);
+        }
+        
+        .mobile-nav-item:hover img {
+            transform: scale(1.1);
+        }
+        
+        .mobile-nav-text {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--secondary-color);
+            transition: var(--transition);
+        }
+        
+        .mobile-nav-item:hover .mobile-nav-text {
+            color: var(--primary-color);
+        }
+        
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            z-index: 999;
+        }
+        
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo" onclick="location.href='/home-mentee.html'">
+            <img src="./image/symbol.png" alt="이음 로고" style="width: 40px; height: 40px; margin-right: 10px;">
+            <span class="logo-text"> [ 이;음 ] - 사람을 잇다 </span>
+        </div>
+        <div class="nav-menu">
+            <div class="nav-item" onclick="location.href='https://cafe.naver.com/ieum365'">
+                <img src="./image/naver-cafe.png" alt="네이버 카페">
+            </div>
+            <div class="nav-item" onclick="location.href='http://pf.kakao.com/_pVCxen'">
+                <img src="./image/kakaotalk-channel.jpg" alt="카카오톡 채널">
+            </div>
+            <div class="nav-item">
+                <img src="./image/profile.png" alt="프로필">
+            </div>
+            <div class="nav-item" onclick="location.href='/landing.html'">
+                <img src="./image/logout.png" alt="로그아웃">
+            </div>
+        </div>
+        <div class="hamburger-menu">
+            <div class="hamburger-icon"></div>
+        </div>
+    </header>
+    
+    <!-- 모바일 내비게이션 -->
+    <div class="mobile-nav">
+        <div class="mobile-nav-item">
+            <img src="./image/naver-cafe.png" alt="네이버 카페">
+            <span class="mobile-nav-text">네이버 카페</span>
+        </div>
+        <div class="mobile-nav-item">
+            <img src="./image/kakaotalk-channel.jpg" alt="카카오톡 채널">
+            <span class="mobile-nav-text">카카오톡 채널</span>
+        </div>
+        <div class="mobile-nav-item">
+            <img src="./image/profile.png" alt="프로필">
+            <span class="mobile-nav-text">프로필</span>
+        </div>
+        <div class="mobile-nav-item">
+            <img src="./image/logout.png" alt="로그아웃">
+            <span class="mobile-nav-text">로그아웃</span>
+        </div>
+    </div>
+    
+    <!-- 오버레이 -->
+    <div class="overlay"></div>
+    
+    <div class="main-layout">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                O주차 멘토링 신청
+                <div class="sidebar-period">(2025. 9. 15~ 9. 19.)</div>
+            </div>
+            <div class="sidebar-menu">
+                <div class="sidebar-item" onclick="location.href='/notice.html'">Notice</div>
+                <div class="sidebar-item active" onclick="location.href='/mentor-schedule.html'">멘토 스케줄</div>
+                <div class="sidebar-item" onclick="location.href='/mentoring-application.html'">멘토링 신청</div>
+                <div class="sidebar-item" onclick="location.href='/mentoring-status.html'">신청내역 열람/취소</div>
+            </div>
+        </div>
+        
+        <!-- Content Area -->
+        <div class="content-area">
+            <div class="content-header">
+                <h1 class="page-title">멘토 스케줄</h1>
+            </div>
+            
+            <!-- Day Tabs -->
+            <div class="day-tabs">
+                <div class="day-tab active" data-day="monday">월(9/15)</div>
+                <div class="day-tab" data-day="tuesday">화(9/16)</div>
+                <div class="day-tab" data-day="wednesday">수(9/17)</div>
+                <div class="day-tab" data-day="thursday">목(9/18)</div>
+                <div class="day-tab" data-day="friday">금(9/19)</div>
+                <div class="day-tab" data-day="saturday">토(9/20)</div>
+                <div class="day-tab" data-day="sunday">일(9/21)</div>
+            </div>
+            
+            <div class="schedule-container">
+                <!-- 월요일 -->
+                <div class="day-content active" id="monday">
+                    <table class="schedule-table">
+                        <thead>
+                            <tr>
+                                <th>시간</th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="time-cell">9:00~10:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">10:00~11:00</td>
+                                <td rowspan="2">
+                                    <div class="schedule-slot multi-hour" data-mentor="최00" data-field="재경" data-time="9월 15일(월) 10:00-12:00" data-location="강남역" data-description="회계 실무 및 세무 상담\n2시간 심화 과정">
+                                        <div class="mentor-name">최00</div>
+                                        <div class="mentor-detail">(재경)</div>
+                                    </div>
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">11:00~12:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">12:00~13:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">13:00~14:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">14:00~15:00</td>
+                                <td rowspan="4">
+                                    <div class="schedule-slot multi-hour" data-mentor="박00" data-field="일반행정" data-time="9월 15일(월) 14:00-18:00" data-location="시청역" data-description="공무원 시험 준비 및 면접 코칭\n4시간 종합 멘토링 과정">
+                                        <div class="mentor-name">박00</div>
+                                        <div class="mentor-detail">(일반행정)</div>
+                                    </div>
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">15:00~16:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">16:00~17:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">17:00~18:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">18:00~19:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">19:00~20:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">20:00~21:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">21:00~22:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 화요일 -->
+                <div class="day-content" id="tuesday">
+                    <table class="schedule-table">
+                        <thead>
+                            <tr>
+                                <th>시간</th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="time-cell">9:00~10:00</td>
+                                <td rowspan="3">
+                                    <div class="schedule-slot multi-hour" data-mentor="김00" data-field="전산개발" data-time="9월 16일(화) 9:00-12:00" data-location="신림~서울대입구" data-description="남기고 싶은 코멘트">
+                                        <div class="mentor-name">김00</div>
+                                        <div class="mentor-detail">(전산개발)</div>
+                                    </div>
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">10:00~11:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">11:00~12:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">12:00~13:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">13:00~14:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">14:00~15:00</td>
+                                <td></td>
+                                <td>
+                                    <div class="schedule-slot" data-mentor="정00" data-field="일반기계" data-time="9월 16일(화) 14:00-15:00" data-location="을지로입구" data-description="기술직 공무원 상담\n1시간 개인 상담">
+                                        <div class="mentor-name">정00</div>
+                                        <div class="mentor-detail">(일반기계)</div>
+                                    </div>
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">15:00~16:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">16:00~17:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">17:00~18:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">18:00~19:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">19:00~20:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">20:00~21:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">21:00~22:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 수요일 -->
+                <div class="day-content" id="wednesday">
+                    <table class="schedule-table">
+                        <thead>
+                            <tr>
+                                <th>시간</th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="time-cell">9:00~10:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">10:00~11:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">11:00~12:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">12:00~13:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">13:00~14:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">14:00~15:00</td>
+                                <td></td>
+                                <td></td>
+                                <td rowspan="2">
+                                    <div class="schedule-slot multi-hour" data-mentor="이00" data-field="일반행정" data-time="9월 17일(수) 14:00-16:00" data-location="홍대입구" data-description="행정고시 2차 준비 멘토링\n2시간 집중 과정">
+                                        <div class="mentor-name">이00</div>
+                                        <div class="mentor-detail">(일반행정)</div>
+                                    </div>
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">15:00~16:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">16:00~17:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">17:00~18:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">18:00~19:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">19:00~20:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    <div class="schedule-slot" data-mentor="강00" data-field="검찰" data-time="9월 17일(수) 19:00-20:00" data-location="종로3가" data-description="검찰공무원 시험 준비\n저녁 시간대 상담">
+                                        <div class="mentor-name">강00</div>
+                                        <div class="mentor-detail">(검찰)</div>
+                                    </div>
+                                </td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">20:00~21:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">21:00~22:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 목요일 -->
+                <div class="day-content" id="thursday">
+                    <table class="schedule-table">
+                        <thead>
+                            <tr>
+                                <th>시간</th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="time-cell">9:00~10:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">10:00~11:00</td>
+                                <td></td>
+                                <td>
+                                    <div class="schedule-slot" data-mentor="윤00" data-field="재경" data-time="9월 18일(목) 10:00-11:00" data-location="명동" data-description="세무회계 실무 상담\n오전 시간대 멘토링">
+                                        <div class="mentor-name">윤00</div>
+                                        <div class="mentor-detail">(재경)</div>
+                                    </div>
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">11:00~12:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">12:00~13:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">13:00~14:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">14:00~15:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">15:00~16:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td rowspan="3">
+                                    <div class="schedule-slot multi-hour" data-mentor="송00" data-field="전산개발" data-time="9월 18일(목) 15:00-18:00" data-location="판교" data-description="IT 개발자 취업 준비\n포트폴리오 검토 및 면접 준비\n3시간 종합 멘토링">
+                                        <div class="mentor-name">송00</div>
+                                        <div class="mentor-detail">(전산개발)</div>
+                                    </div>
+                                </td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">16:00~17:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">17:00~18:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">18:00~19:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">19:00~20:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">20:00~21:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">21:00~22:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 금요일 -->
+                <div class="day-content" id="friday">
+                    <table class="schedule-table">
+                        <thead>
+                            <tr>
+                                <th>시간</th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="time-cell">9:00~10:00</td>
+                                <td>
+                                    <div class="schedule-slot" data-mentor="조00" data-field="방재안전" data-time="9월 19일(금) 9:00-10:00" data-location="영등포구청" data-description="방재안전공무원 시험 준비\n체력시험 및 면접 대비">
+                                        <div class="mentor-name">조00</div>
+                                        <div class="mentor-detail">(방재안전)</div>
+                                    </div>
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">10:00~11:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">11:00~12:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">12:00~13:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">13:00~14:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">14:00~15:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td rowspan="2">
+                                    <div class="schedule-slot multi-hour" data-mentor="임00" data-field="일반행정" data-time="9월 19일(금) 14:00-16:00" data-location="여의도" data-description="5급 공채 최종 면접 대비\n모의면접 및 피드백\n2시간 집중 과정">
+                                        <div class="mentor-name">임00</div>
+                                        <div class="mentor-detail">(일반행정)</div>
+                                    </div>
+                                </td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">15:00~16:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">16:00~17:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">17:00~18:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">18:00~19:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">19:00~20:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">20:00~21:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">21:00~22:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 토요일 -->
+                <div class="day-content" id="saturday">
+                    <table class="schedule-table">
+                        <thead>
+                            <tr>
+                                <th>시간</th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="time-cell">9:00~10:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">10:00~11:00</td>
+                                <td></td>
+                                <td rowspan="4">
+                                    <div class="schedule-slot multi-hour" data-mentor="한00" data-field="재경" data-time="9월 20일(토) 10:00-14:00" data-location="강남역" data-description="주말 특별 멘토링\nCPA 시험 준비 종합 과정\n4시간 심화 프로그램">
+                                        <div class="mentor-name">한00</div>
+                                        <div class="mentor-detail">(재경)</div>
+                                    </div>
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">11:00~12:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">12:00~13:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">13:00~14:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">14:00~15:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">15:00~16:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">16:00~17:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">17:00~18:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">18:00~19:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">19:00~20:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">20:00~21:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">21:00~22:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 일요일 -->
+                <div class="day-content" id="sunday">
+                    <table class="schedule-table">
+                        <thead>
+                            <tr>
+                                <th>시간</th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="time-cell">9:00~10:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">10:00~11:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">11:00~12:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">12:00~13:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">13:00~14:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">14:00~15:00</td>
+                                <td></td>
+                                <td></td>
+                                <td rowspan="2">
+                                    <div class="schedule-slot multi-hour" data-mentor="안00" data-field="전산개발" data-time="9월 21일(일) 14:00-16:00" data-location="홍대입구" data-description="주말 개발자 멘토링\n프로젝트 코드 리뷰\n기술 스택 상담">
+                                        <div class="mentor-name">안00</div>
+                                        <div class="mentor-detail">(전산개발)</div>
+                                    </div>
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">15:00~16:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">16:00~17:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">17:00~18:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">18:00~19:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">19:00~20:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">20:00~21:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="time-cell">21:00~22:00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 멘토 정보 모달 -->
+     <div class="modal-overlay" id="mentorModal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">멘토정보</div>
+                <button class="modal-close" id="closeModal">×</button>
+            </div>
+            <div class="modal-content">
+                <div class="modal-info-row">
+                    <span class="modal-info-label">이름</span>
+                    <span class="modal-info-value" id="modalName">김00</span>
+                </div>
+                <div class="modal-info-row">
+                    <span class="modal-info-label">직류</span>
+                    <span class="modal-info-value" id="modalField">재경</span>
+                </div>
+                <div class="modal-info-row">
+                    <span class="modal-info-label">일시</span>
+                    <span class="modal-info-value" id="modalTime">9월 15일(월) 10:00-13:00</span>
+                </div>
+                <div class="modal-info-row">
+                    <span class="modal-info-label">가능지역</span>
+                    <span class="modal-info-value" id="modalLocation">신림~서울대입구</span>
+                </div>
+                <div class="modal-description">
+                    <div class="modal-description-label">기타사항</div>
+                    <div class="modal-description-content" id="modalDescription">
+                        남기고 싶은 코멘트
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2025 이음. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // 사이드바 메뉴 클릭 이벤트
+        document.querySelectorAll('.sidebar-item').forEach(item => {
+            item.addEventListener('click', function() {
+                // 모든 항목에서 active 클래스 제거
+                document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+                // 클릭된 항목에 active 클래스 추가
+                this.classList.add('active');
+                
+                alert(`${this.textContent} 페이지로 이동합니다.`);
+            });
+        });
+        
+        // 요일 탭 클릭 이벤트
+        document.querySelectorAll('.day-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                // 모든 탭에서 active 클래스 제거
+                document.querySelectorAll('.day-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.day-content').forEach(c => c.classList.remove('active'));
+                
+                // 클릭된 탭과 해당 콘텐츠에 active 클래스 추가
+                this.classList.add('active');
+                const dayId = this.dataset.day;
+                document.getElementById(dayId).classList.add('active');
+            });
+        });
+        
+        // 햄버거 메뉴 이벤트
+        const hamburgerMenu = document.querySelector('.hamburger-menu');
+        const mobileNav = document.querySelector('.mobile-nav');
+        const overlay = document.querySelector('.overlay');
+        
+        if (hamburgerMenu) {
+            hamburgerMenu.addEventListener('click', function() {
+                hamburgerMenu.classList.toggle('active');
+                mobileNav.classList.toggle('active');
+                overlay.classList.toggle('active');
+                document.body.style.overflow = mobileNav.classList.contains('active') ? 'hidden' : '';
+            });
+        }
+        
+        // 오버레이 클릭 이벤트
+        if (overlay) {
+            overlay.addEventListener('click', function() {
+                hamburgerMenu.classList.remove('active');
+                mobileNav.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        }
+        
+        // 모바일 내비게이션 아이템 클릭 이벤트
+        document.querySelectorAll('.mobile-nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                if (hamburgerMenu) {
+                    hamburgerMenu.classList.remove('active');
+                }
+                if (mobileNav) {
+                    mobileNav.classList.remove('active');
+                }
+                if (overlay) {
+                    overlay.classList.remove('active');
+                }
+                document.body.style.overflow = '';
+                
+                alert(`${this.querySelector('.mobile-nav-text').textContent} 페이지로 이동합니다.`);
+            });
+        });
+        
+        // 멘토 스케줄 클릭 이벤트 (모달 열기)
+        document.querySelectorAll('.schedule-slot').forEach(slot => {
+            slot.addEventListener('click', function() {
+                const mentor = this.dataset.mentor;
+                const field = this.dataset.field;
+                const time = this.dataset.time;
+                const location = this.dataset.location;
+                const description = this.dataset.description;
+                
+                // 모달에 정보 설정
+                document.getElementById('modalName').textContent = mentor;
+                document.getElementById('modalField').textContent = field;
+                document.getElementById('modalTime').textContent = time;
+                document.getElementById('modalLocation').textContent = location;
+                document.getElementById('modalDescription').textContent = description;
+                
+                // 모달 열기
+                document.getElementById('mentorModal').classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+        });
+        
+        // 모달 닫기 이벤트
+        document.getElementById('closeModal').addEventListener('click', function() {
+            document.getElementById('mentorModal').classList.remove('active');
+            document.body.style.overflow = '';
+        });
+        
+        // 모달 배경 클릭시 닫기
+        document.getElementById('mentorModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+    </script>
+</body>
+</html>

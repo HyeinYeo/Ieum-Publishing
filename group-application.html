@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>이음 - 멘티 신청(팀)</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap');
+        
+        :root {
+            --primary-color: #7ECCC2;
+            --primary-light: #E5F6F4;
+            --secondary-color: #333333;
+            --background-color: #f9fafa;
+            --box-color: #f2f2f2;
+            --active-color: #7ECCC2;
+            --inactive-color: #e0e0e0;
+            --accent-color: #FFD600;
+            --text-color: #333333;
+            --light-text: #777777;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            --card-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+            --transition: all 0.2s ease;
+            --border-radius: 12px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html, body {
+            width: 100%;
+            height: 100%;
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+        
+        /* Header */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 18px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            box-shadow: 0 1px 20px rgba(126, 204, 194, 0.1);
+            border-bottom: 1px solid rgba(126, 204, 194, 0.1);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+        
+        .logo::before {
+            content: '';
+            position: absolute;
+            left: -10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 35px;
+            background: linear-gradient(135deg, var(--primary-color), #5AB5A8);
+            border-radius: 2px;
+        }
+        
+        .logo-text {
+            font-size: 22px;
+            font-weight: 600;
+            background: linear-gradient(135deg, var(--primary-color), #5AB5A8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 0.5px;
+            margin-left: 10px;
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .nav-item {
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(126, 204, 194, 0.08);
+            border-radius: 12px;
+            border: 1px solid rgba(126, 204, 194, 0.15);
+            transition: var(--transition);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(126, 204, 194, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .nav-item:hover::before {
+            left: 100%;
+        }
+        
+        .nav-item:hover {
+            transform: translateY(-2px);
+            background: rgba(126, 204, 194, 0.15);
+            border-color: var(--primary-color);
+            box-shadow: 0 8px 25px rgba(126, 204, 194, 0.25);
+        }
+        
+        .nav-item:active {
+            transform: translateY(0);
+        }
+        
+        .nav-item img {
+            width: 24px;
+            height: 24px;
+            transition: var(--transition);
+            filter: grayscale(20%);
+        }
+        
+        .nav-item:hover img {
+            filter: grayscale(0%);
+            transform: scale(1.1);
+        }
+        
+        /* 햄버거 메뉴 */
+        .hamburger-menu {
+            display: none;
+            width: 32px;
+            height: 32px;
+            position: relative;
+            cursor: pointer;
+            z-index: 1001;
+            margin-left: auto;
+            padding: 4px;
+            border-radius: 8px;
+            background: rgba(126, 204, 194, 0.08);
+            border: 1px solid rgba(126, 204, 194, 0.15);
+            transition: var(--transition);
+        }
+        
+        .hamburger-menu:hover {
+            background: rgba(126, 204, 194, 0.15);
+            border-color: var(--primary-color);
+        }
+        
+        .hamburger-icon {
+            width: 20px;
+            height: 2px;
+            background: var(--primary-color);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transition: var(--transition);
+            border-radius: 1px;
+        }
+        
+        .hamburger-icon::before,
+        .hamburger-icon::after {
+            content: '';
+            width: 20px;
+            height: 2px;
+            background: var(--primary-color);
+            position: absolute;
+            transition: var(--transition);
+            border-radius: 1px;
+        }
+        
+        .hamburger-icon::before {
+            top: -6px;
+        }
+        
+        .hamburger-icon::after {
+            top: 6px;
+        }
+        
+        .hamburger-menu.active {
+            background: rgba(126, 204, 194, 0.2);
+        }
+        
+        .hamburger-menu.active .hamburger-icon {
+            background: transparent;
+        }
+        
+        .hamburger-menu.active .hamburger-icon::before {
+            transform: rotate(45deg);
+            top: 0;
+        }
+        
+        .hamburger-menu.active .hamburger-icon::after {
+            transform: rotate(-45deg);
+            top: 0;
+        }
+        
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 75%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 90px 25px 25px;
+            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
+            border-left: 1px solid rgba(126, 204, 194, 0.1);
+            transition: var(--transition);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        
+        .mobile-nav.active {
+            right: 0;
+        }
+        
+        .mobile-nav-item {
+            display: flex;
+            align-items: center;
+            padding: 18px 20px;
+            margin-bottom: 8px;
+            border-radius: 12px;
+            background: rgba(126, 204, 194, 0.05);
+            border: 1px solid rgba(126, 204, 194, 0.1);
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .mobile-nav-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--primary-color);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .mobile-nav-item:hover::before {
+            transform: scaleY(1);
+        }
+        
+        .mobile-nav-item:hover {
+            background: rgba(126, 204, 194, 0.1);
+            border-color: var(--primary-color);
+            transform: translateX(5px);
+        }
+        
+        .mobile-nav-item img {
+            width: 26px;
+            height: 26px;
+            margin-right: 15px;
+            transition: var(--transition);
+        }
+        
+        .mobile-nav-item:hover img {
+            transform: scale(1.1);
+        }
+        
+        .mobile-nav-text {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--secondary-color);
+            transition: var(--transition);
+        }
+        
+        .mobile-nav-item:hover .mobile-nav-text {
+            color: var(--primary-color);
+        }
+        
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            z-index: 999;
+        }
+        
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        /* 컨테이너 */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 100px 20px 60px;
+        }
+        
+        .page-title {
+            text-align: center;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--secondary-color);
+            margin-bottom: 40px;
+            position: relative;
+            padding-bottom: 15px;
+            margin-top: 30px;
+        }
+        
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background-color: var(--primary-color);
+            border-radius: 2px;
+        }
+        
+        /* 메인 레이아웃 */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            align-items: start;
+        }
+        
+        /* 좌측 영역 - 주의사항 */
+        .notice-section {
+            background-color: var(--box-color);
+            border-radius: var(--border-radius);
+            padding: 40px;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            min-height: 400px;
+        }
+        
+        .notice-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--secondary-color);
+            margin-bottom: 30px;
+        }
+        
+        .notice-content {
+            font-size: 20px;
+            line-height: 1.8;
+            color: var(--text-color);
+            font-weight: 500;
+        }
+        
+        .notice-content .highlight {
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+        
+        .notice-content .small-text {
+            font-size: 18px;
+            margin-top: 40px;
+            color: var(--light-text);
+        }
+        
+        /* 우측 영역 - 신청 폼 */
+        .application-section {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 40px;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            min-height: 400px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+        
+        .form-input {
+            padding: 15px 18px;
+            border: 2px solid rgba(126, 204, 194, 0.3);
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: 'Noto Sans KR', sans-serif;
+            transition: var(--transition);
+            background-color: white;
+        }
+        
+        select.form-input {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237ECCC2' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 16px;
+            padding-right: 40px;
+            cursor: pointer;
+        }
+        
+        select.form-input:disabled {
+            background-color: #f5f5f5;
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(126, 204, 194, 0.1);
+        }
+        
+        .form-input::placeholder {
+            color: var(--light-text);
+        }
+        
+        .form-textarea {
+            min-height: 80px;
+            resize: vertical;
+            font-family: inherit;
+        }
+        
+        /* 스터디원 정보 섹션 */
+        .study-member-section {
+            margin-top: 25px;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-color);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .member-card {
+            background-color: var(--primary-light);
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 20px;
+            position: relative;
+            border: 1px solid rgba(126, 204, 194, 0.2);
+        }
+        
+        .member-number {
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            background: var(--primary-color);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 16px;
+        }
+        
+        .member-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .member-form .form-group {
+            margin-bottom: 0;
+        }
+        
+        .job-selection {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .remove-member {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #ff4757;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+        
+        .remove-member:hover {
+            background: #ff3838;
+            transform: scale(1.1);
+        }
+        
+        /* 추가 버튼 */
+        .add-member-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+            cursor: pointer;
+            transition: var(--transition);
+            margin: 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(126, 204, 194, 0.3);
+        }
+        
+        .add-member-btn:hover {
+            background: #5AB5A8;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(126, 204, 194, 0.4);
+        }
+        
+        .submit-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 18px 25px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 30px;
+            box-shadow: 0 4px 12px rgba(126, 204, 194, 0.3);
+            margin-left: auto;
+            display: block;
+        }
+        
+        .submit-button:hover {
+            background-color: #5AB5A8;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(126, 204, 194, 0.4);
+        }
+        
+        .submit-button:active {
+            transform: translateY(0);
+        }
+        
+        /* Footer */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 12px 0;
+            text-align: center;
+            font-size: 12px;
+            color: var(--light-text);
+            z-index: 10;
+            background-color: transparent;
+        }
+        
+        .footer p {
+            margin: 0;
+            font-weight: 300;
+        }
+        
+        /* 반응형 스타일 */
+        @media (max-width: 900px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+            
+            .notice-section,
+            .application-section {
+                padding: 30px;
+            }
+            
+            .notice-section {
+                min-height: 250px;
+            }
+            
+            .member-form {
+                grid-template-columns: 1fr;
+            }
+            
+            .job-selection {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 767px) {
+            header {
+                padding: 15px 5%;
+            }
+            
+            .logo::before {
+                width: 3px;
+                height: 30px;
+                left: -8px;
+            }
+            
+            .logo-text {
+                font-size: 20px;
+                margin-left: 8px;
+            }
+            
+            .nav-menu {
+                display: none;
+            }
+            
+            .hamburger-menu {
+                display: block;
+            }
+            
+            .page-title {
+                font-size: 24px;
+                margin-bottom: 30px;
+            }
+            
+            .container {
+                padding: 85px 15px 60px;
+            }
+            
+            .notice-section,
+            .application-section {
+                padding: 25px;
+            }
+            
+            .notice-title {
+                font-size: 20px;
+                margin-bottom: 20px;
+            }
+            
+            .notice-content {
+                font-size: 18px;
+            }
+            
+            .notice-content .small-text {
+                font-size: 16px;
+                margin-top: 30px;
+            }
+            
+            .form-label {
+                font-size: 15px;
+            }
+            
+            .form-input {
+                padding: 12px 15px;
+                font-size: 15px;
+            }
+            
+            .submit-button {
+                padding: 15px 20px;
+                font-size: 16px;
+            }
+            
+            .member-card {
+                padding: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .notice-section,
+            .application-section {
+                padding: 20px;
+            }
+            
+            .notice-section {
+                min-height: 200px;
+            }
+            
+            .notice-content {
+                font-size: 16px;
+                line-height: 1.6;
+            }
+            
+            .notice-content .small-text {
+                font-size: 14px;
+                margin-top: 25px;
+            }
+            
+            .form-group {
+                gap: 6px;
+            }
+            
+            .member-form {
+                gap: 10px;
+            }
+            
+            .job-selection {
+                gap: 10px;
+            }
+            
+            .member-card {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo" onclick="location.href='/home-mentee.html'">
+            <img src="./image/symbol.png" alt="이음 로고" style="width: 40px; height: 40px; margin-right: 10px;">
+            <span class="logo-text"> [ 이;음 ] - 사람을 잇다 </span>
+        </div>
+        <div class="nav-menu">
+            <div class="nav-item" onclick="location.href='https://cafe.naver.com/ieum365'">
+                <img src="./image/naver-cafe.png" alt="네이버 카페">
+            </div>
+            <div class="nav-item" onclick="location.href='http://pf.kakao.com/_pVCxen'">
+                <img src="./image/kakaotalk-channel.jpg" alt="카카오톡 채널">
+            </div>
+            <div class="nav-item">
+                <img src="./image/profile.png" alt="프로필" onclick="location.href='/mypage-mentee.html'">
+            </div>
+            <div class="nav-item">
+                <img src="./image/logout.png" alt="로그아웃" onclick="location.href='/landing.html'">
+            </div>
+        </div>
+        <div class="hamburger-menu">
+            <div class="hamburger-icon"></div>
+        </div>
+    </header>
+    
+    <!-- 모바일 내비게이션 -->
+    <div class="mobile-nav">
+        <div class="mobile-nav-item">
+            <img src="./image/naver-cafe.png" alt="네이버 카페">
+            <span class="mobile-nav-text">네이버 카페</span>
+        </div>
+        <div class="mobile-nav-item">
+            <img src="./image/kakaotalk-channel.jpg" alt="카카오톡 채널">
+            <span class="mobile-nav-text">카카오톡 채널</span>
+        </div>
+        <div class="mobile-nav-item">
+            <img src="./image/profile.png" alt="프로필">
+            <span class="mobile-nav-text">프로필</span>
+        </div>
+        <div class="mobile-nav-item">
+            <img src="./image/logout.png" alt="로그아웃">
+            <span class="mobile-nav-text">로그아웃</span>
+        </div>
+    </div>
+    
+    <!-- 오버레이 -->
+    <div class="overlay"></div>
+    
+    <div class="container">
+        <h1 class="page-title">멘티 신청(팀)</h1>
+        
+        <div class="main-layout">
+            <!-- 좌측 영역 - 주의사항 -->
+            <div class="notice-section">
+                <h2 class="notice-title">주의사항</h2>
+                <div class="notice-content">
+                    <span class="highlight">대표자만 신청 가능</span><br>
+                    <br>
+                    <div class="small-text">etc.</div>
+                </div>
+            </div>
+            
+            <!-- 우측 영역 - 신청 폼 -->
+            <div class="application-section">
+                <form id="teamApplicationForm">
+                    <!-- 스터디 기본 정보 -->
+                    <div class="form-group">
+                        <label class="form-label">스터디 이름</label>
+                        <input type="text" class="form-input" placeholder="스터디 이름을 입력해주세요" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">스터디 종류</label>
+                        <select class="form-input" required>
+                            <option value="">스터디원들의 직군</option>
+                            <option value="admin">행정</option>
+                            <option value="tech">과학기술</option>
+                            <option value="mixed">혼합(행정+과학기술)</option>
+                        </select>
+                    </div>
+                    
+                    <!-- 스터디원 정보 섹션 -->
+                    <div class="study-member-section">
+                        <div class="section-title">스터디원 정보</div>
+                        
+                        <div id="membersContainer">
+                            <!-- 첫 번째 스터디원 (기본) -->
+                            <div class="member-card" data-member="1">
+                                <div class="member-number">1</div>
+                                <div class="member-form">
+                                    <div class="form-group">
+                                        <label class="form-label">수험번호</label>
+                                        <input type="text" class="form-input" placeholder="수험번호" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">전화번호</label>
+                                        <input type="tel" class="form-input" placeholder="전화번호" required>
+                                    </div>
+                                    <div class="job-selection">
+                                        <div class="form-group">
+                                            <label class="form-label">직군</label>
+                                            <select class="form-input job-category" required>
+                                                <option value="">직군 선택</option>
+                                                <option value="admin">행정</option>
+                                                <option value="tech">과학기술</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">직류</label>
+                                            <select class="form-input job-type" disabled required>
+                                                <option value="">직류 선택</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 두 번째 스터디원 (기본) -->
+                            <div class="member-card" data-member="2">
+                                <div class="member-number">2</div>
+                                <div class="member-form">
+                                    <div class="form-group">
+                                        <label class="form-label">수험번호</label>
+                                        <input type="text" class="form-input" placeholder="수험번호" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">전화번호</label>
+                                        <input type="tel" class="form-input" placeholder="전화번호" required>
+                                    </div>
+                                    <div class="job-selection">
+                                        <div class="form-group">
+                                            <label class="form-label">직군</label>
+                                            <select class="form-input job-category" required>
+                                                <option value="">직군 선택</option>
+                                                <option value="admin">행정</option>
+                                                <option value="tech">과학기술</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">직류</label>
+                                            <select class="form-input job-type" disabled required>
+                                                <option value="">직류 선택</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 스터디원 추가 버튼 -->
+                        <button type="button" class="add-member-btn" id="addMemberBtn">+</button>
+                    </div>
+                    
+                    <button type="submit" class="submit-button">확인</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2025 이음. All rights reserved.</p>
+    </footer>
+
+    <script>
+        let memberCount = 2;
+        
+        // 직군별 직류 옵션
+        const jobOptions = {
+            admin: ['일반행정', '재경', '교육행정', '법무행정', '국제통상', '사회복지', '교정', '검찰', '출입국관리', '보호'],
+            tech: ['일반기계', '화공', '전기', '전자', '통신기술', '일반농업', '산림자원', '일반수산', '일반환경', '기상', '일반토목', '건축', '시설조경', '방재안전', '전산개발', '데이터', '정보보호']
+        };
+        
+        // 직군 변경 이벤트 리스너 추가
+        function addJobCategoryListener(memberCard) {
+            const jobCategory = memberCard.querySelector('.job-category');
+            const jobType = memberCard.querySelector('.job-type');
+            
+            jobCategory.addEventListener('change', function() {
+                jobType.disabled = false;
+                jobType.innerHTML = '<option value="">직류 선택</option>';
+                
+                const selectedCategory = this.value;
+                if (jobOptions[selectedCategory]) {
+                    jobOptions[selectedCategory].forEach(function(option) {
+                        const optionElement = document.createElement('option');
+                        optionElement.value = option.toLowerCase().replace(/\s+/g, '_');
+                        optionElement.textContent = option;
+                        jobType.appendChild(optionElement);
+                    });
+                }
+            });
+        }
+        
+        // 스터디원 추가 함수
+        function addMember() {
+            memberCount++;
+            const membersContainer = document.getElementById('membersContainer');
+            
+            const memberCard = document.createElement('div');
+            memberCard.className = 'member-card';
+            memberCard.setAttribute('data-member', memberCount);
+            
+            memberCard.innerHTML = `
+                <div class="member-number">${memberCount}</div>
+                <button type="button" class="remove-member" onclick="removeMember(this)">×</button>
+                <div class="member-form">
+                    <div class="form-group">
+                        <label class="form-label">수험번호</label>
+                        <input type="text" class="form-input" placeholder="수험번호" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">전화번호</label>
+                        <input type="tel" class="form-input" placeholder="전화번호" required>
+                    </div>
+                    <div class="job-selection">
+                        <div class="form-group">
+                            <label class="form-label">직군</label>
+                            <select class="form-input job-category" required>
+                                <option value="">직군 선택</option>
+                                <option value="admin">행정</option>
+                                <option value="tech">기술</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">직류</label>
+                            <select class="form-input job-type" disabled required>
+                                <option value="">직류 선택</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            membersContainer.appendChild(memberCard);
+            addJobCategoryListener(memberCard);
+            
+            // 애니메이션 효과
+            memberCard.style.opacity = '0';
+            memberCard.style.transform = 'translateY(20px)';
+            setTimeout(() => {
+                memberCard.style.transition = 'all 0.3s ease';
+                memberCard.style.opacity = '1';
+                memberCard.style.transform = 'translateY(0)';
+            }, 10);
+        }
+        
+        // 스터디원 제거 함수
+        function removeMember(button) {
+            const memberCard = button.closest('.member-card');
+            memberCard.style.transition = 'all 0.3s ease';
+            memberCard.style.opacity = '0';
+            memberCard.style.transform = 'translateY(-20px)';
+            
+            setTimeout(() => {
+                memberCard.remove();
+                updateMemberNumbers();
+            }, 300);
+        }
+        
+        // 멤버 번호 업데이트
+        function updateMemberNumbers() {
+            const memberCards = document.querySelectorAll('.member-card');
+            memberCount = memberCards.length;
+            
+            memberCards.forEach((card, index) => {
+                card.setAttribute('data-member', index + 1);
+                card.querySelector('.member-number').textContent = index + 1;
+            });
+        }
+        
+        // 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            // 기존 멤버들에 이벤트 리스너 추가
+            document.querySelectorAll('.member-card').forEach(memberCard => {
+                addJobCategoryListener(memberCard);
+            });
+            
+            // 스터디원 추가 버튼 이벤트
+            document.getElementById('addMemberBtn').addEventListener('click', addMember);
+            
+            // 햄버거 메뉴 이벤트
+            const hamburgerMenu = document.querySelector('.hamburger-menu');
+            const mobileNav = document.querySelector('.mobile-nav');
+            const overlay = document.querySelector('.overlay');
+            
+            if (hamburgerMenu) {
+                hamburgerMenu.addEventListener('click', function() {
+                    hamburgerMenu.classList.toggle('active');
+                    mobileNav.classList.toggle('active');
+                    overlay.classList.toggle('active');
+                    document.body.style.overflow = mobileNav.classList.contains('active') ? 'hidden' : '';
+                });
+            }
+            
+            // 오버레이 클릭 이벤트
+            if (overlay) {
+                overlay.addEventListener('click', function() {
+                    hamburgerMenu.classList.remove('active');
+                    mobileNav.classList.remove('active');
+                    overlay.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+            }
+            
+            // 모바일 내비게이션 아이템 클릭 이벤트
+            document.querySelectorAll('.mobile-nav-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    hamburgerMenu.classList.remove('active');
+                    mobileNav.classList.remove('active');
+                    overlay.classList.remove('active');
+                    document.body.style.overflow = '';
+                    
+                    alert(`${this.querySelector('.mobile-nav-text').textContent} 페이지로 이동합니다.`);
+                });
+            });
+            
+            // 폼 제출 이벤트
+            document.getElementById('teamApplicationForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('그룹 멘티 신청이 완료되었습니다!');
+            });
+            
+            // 네비게이션 아이템 클릭 이벤트
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const altText = this.querySelector('img').alt;
+                    alert(`${altText} 페이지로 이동합니다.`);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

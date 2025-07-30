@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>이음 - 사람을 잇다</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap');
+        
+        :root {
+            --primary-color: #7ECCC2;
+            --active-bg: #d8f2ef;
+            --secondary-color: #595959;
+            --light-bg: #E5F6F4;
+            --header-bg: #d8f2ef;
+            --accent-color: #FFD600;
+            --inactive-color: #e0e0e0;
+            --shadow: 0 5px 15px rgba(126, 204, 194, 0.1);
+            --card-shadow: 0 8px 16px rgba(126, 204, 194, 0.1);
+            --transition: all 0.25s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html, body {
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #ffffff;
+            position: relative;
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* Header */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 18px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            box-shadow: 0 1px 20px rgba(126, 204, 194, 0.1);
+            border-bottom: 1px solid rgba(126, 204, 194, 0.1);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+        
+        .logo::before {
+            content: '';
+            position: absolute;
+            left: -10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 35px;
+            background: linear-gradient(135deg, var(--primary-color), #5AB5A8);
+            border-radius: 2px;
+        }
+        
+        .logo-text {
+            font-size: 22px;
+            font-weight: 600;
+            background: linear-gradient(135deg, var(--primary-color), #5AB5A8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 0.5px;
+            margin-left: 10px;
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .nav-item {
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(126, 204, 194, 0.08);
+            border-radius: 12px;
+            border: 1px solid rgba(126, 204, 194, 0.15);
+            transition: var(--transition);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(126, 204, 194, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .nav-item:hover::before {
+            left: 100%;
+        }
+        
+        .nav-item:hover {
+            transform: translateY(-2px);
+            background: rgba(126, 204, 194, 0.15);
+            border-color: var(--primary-color);
+            box-shadow: 0 8px 25px rgba(126, 204, 194, 0.25);
+        }
+        
+        .nav-item:active {
+            transform: translateY(0);
+        }
+        
+        .nav-item img {
+            width: 24px;
+            height: 24px;
+            transition: var(--transition);
+            filter: grayscale(20%);
+        }
+        
+        .nav-item:hover img {
+            filter: grayscale(0%);
+            transform: scale(1.1);
+        }
+        
+        /* 햄버거 메뉴 */
+        .hamburger-menu {
+            display: none;
+            width: 32px;
+            height: 32px;
+            position: relative;
+            cursor: pointer;
+            z-index: 1001;
+            margin-left: auto;
+            padding: 4px;
+            border-radius: 8px;
+            background: rgba(126, 204, 194, 0.08);
+            border: 1px solid rgba(126, 204, 194, 0.15);
+            transition: var(--transition);
+        }
+        
+        .hamburger-menu:hover {
+            background: rgba(126, 204, 194, 0.15);
+            border-color: var(--primary-color);
+        }
+        
+        .hamburger-icon {
+            width: 20px;
+            height: 2px;
+            background: var(--primary-color);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transition: var(--transition);
+            border-radius: 1px;
+        }
+        
+        .hamburger-icon::before,
+        .hamburger-icon::after {
+            content: '';
+            width: 20px;
+            height: 2px;
+            background: var(--primary-color);
+            position: absolute;
+            transition: var(--transition);
+            border-radius: 1px;
+        }
+        
+        .hamburger-icon::before {
+            top: -6px;
+        }
+        
+        .hamburger-icon::after {
+            top: 6px;
+        }
+        
+        .hamburger-menu.active {
+            background: rgba(126, 204, 194, 0.2);
+        }
+        
+        .hamburger-menu.active .hamburger-icon {
+            background: transparent;
+        }
+        
+        .hamburger-menu.active .hamburger-icon::before {
+            transform: rotate(45deg);
+            top: 0;
+        }
+        
+        .hamburger-menu.active .hamburger-icon::after {
+            transform: rotate(-45deg);
+            top: 0;
+        }
+        
+        /* Main Layout */
+        .main-layout {
+            display: flex;
+            height: 100vh;
+            padding-top: 85px;
+            padding-bottom: 0;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 300px;
+            background: var(--light-bg);
+            border-right: 1px solid rgba(126, 204, 194, 0.2);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+        
+        .sidebar-header {
+            padding: 25px 20px;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(126, 204, 194, 0.8), rgba(90, 181, 168, 0.9));
+            color: white;
+            font-size: 16px;
+            font-weight: 500;
+            border-radius: 0 0 15px 0;
+            box-shadow: 0 2px 8px rgba(126, 204, 194, 0.2);
+        }
+        
+        .sidebar-period {
+            font-size: 14px;
+            margin-top: 5px;
+            opacity: 0.9;
+        }
+        
+        .sidebar-menu {
+            flex: 1;
+            padding: 0;
+        }
+        
+        .sidebar-item {
+            display: block;
+            padding: 20px 25px;
+            color: var(--secondary-color);
+            text-decoration: none;
+            border-bottom: 1px solid rgba(126, 204, 194, 0.1);
+            transition: var(--transition);
+            font-size: 15px;
+            font-weight: 500;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .sidebar-item:hover {
+            background: rgba(126, 204, 194, 0.1);
+            color: var(--primary-color);
+            padding-left: 35px;
+        }
+        
+        .sidebar-item.active {
+            background: var(--active-bg);
+            color: var(--primary-color);
+            font-weight: 600;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .sidebar-item::before {
+            content: '';
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 6px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            opacity: 0;
+            transition: var(--transition);
+        }
+        
+        .sidebar-item.active::before {
+            opacity: 1;
+        }
+        
+        /* Content Area */
+        .content-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #f8f9fa;
+            padding: 40px;
+            overflow-y: auto;
+            height: calc(100vh - 85px);
+        }
+        
+        .content-header {
+            text-align: center;
+            margin-bottom: 40px;
+            flex-shrink: 0;
+        }
+        
+        .page-title {
+            font-size: 48px;
+            font-weight: 300;
+            color: var(--secondary-color);
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+        
+        .server-time {
+            font-size: 72px;
+            font-weight: 700;
+            color: #333;
+            font-family: 'Roboto Mono', 'SF Mono', monospace;
+            margin-bottom: 40px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .content-box {
+            background: #e8e9ea;
+            width: 100%;
+            max-width: 800px;
+            min-height: 200px;
+            padding: 40px;
+            border-radius: 8px;
+            border: 1px solid #d1d3d4;
+            margin-bottom: 40px;
+            flex-shrink: 0;
+        }
+        
+        .content-text {
+            color: #666;
+            font-size: 18px;
+            line-height: 1.6;
+        }
+        
+        /* Footer */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 12px 0;
+            text-align: center;
+            font-size: 12px;
+            color: rgba(51, 51, 51, 0.7);
+            z-index: 10;
+            background-color: transparent;
+        }
+        
+        .footer p {
+            margin: 0;
+            font-weight: 300;
+        }
+        
+        /* Mobile Styles */
+        @media (max-width: 767px) {
+            header {
+                padding: 15px 5%;
+            }
+            
+            .logo::before {
+                width: 3px;
+                height: 30px;
+                left: -8px;
+            }
+            
+            .logo-text {
+                font-size: 20px;
+                margin-left: 8px;
+            }
+            
+            .nav-menu {
+                display: none;
+            }
+            
+            .hamburger-menu {
+                display: block;
+            }
+            
+            .main-layout {
+                flex-direction: column;
+                padding-top: 80px;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+                border-right: none;
+                border-bottom: 1px solid rgba(126, 204, 194, 0.2);
+            }
+            
+            .sidebar-header {
+                border-radius: 0;
+            }
+            
+            .content-area {
+                padding: 20px;
+                min-height: calc(100vh - 200px);
+            }
+            
+            .server-time {
+                font-size: 48px;
+            }
+            
+            .page-title {
+                font-size: 32px;
+            }
+            
+            .content-box {
+                height: 300px;
+            }
+        }
+        
+        /* Mobile Navigation */
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 75%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 90px 25px 25px;
+            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
+            border-left: 1px solid rgba(126, 204, 194, 0.1);
+            transition: var(--transition);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        
+        .mobile-nav.active {
+            right: 0;
+        }
+        
+        .mobile-nav-item {
+            display: flex;
+            align-items: center;
+            padding: 18px 20px;
+            margin-bottom: 8px;
+            border-radius: 12px;
+            background: rgba(126, 204, 194, 0.05);
+            border: 1px solid rgba(126, 204, 194, 0.1);
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .mobile-nav-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--primary-color);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .mobile-nav-item:hover::before {
+            transform: scaleY(1);
+        }
+        
+        .mobile-nav-item:hover {
+            background: rgba(126, 204, 194, 0.1);
+            border-color: var(--primary-color);
+            transform: translateX(5px);
+        }
+        
+        .mobile-nav-item img {
+            width: 26px;
+            height: 26px;
+            margin-right: 15px;
+            transition: var(--transition);
+        }
+        
+        .mobile-nav-item:hover img {
+            transform: scale(1.1);
+        }
+        
+        .mobile-nav-text {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--secondary-color);
+            transition: var(--transition);
+        }
+        
+        .mobile-nav-item:hover .mobile-nav-text {
+            color: var(--primary-color);
+        }
+        
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            z-index: 999;
+        }
+        
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo" onclick="location.href='/home-mentee.html'">
+            <img src="./image/symbol.png" alt="이음 로고" style="width: 40px; height: 40px; margin-right: 10px;">
+            <span class="logo-text"> [ 이;음 ] - 사람을 잇다 </span>
+        </div>
+        <div class="nav-menu">
+            <div class="nav-item" onclick="location.href='https://cafe.naver.com/ieum365'">
+                <img src="./image/naver-cafe.png" alt="네이버 카페">
+            </div>
+            <div class="nav-item" onclick="location.href='http://pf.kakao.com/_pVCxen'">
+                <img src="./image/kakaotalk-channel.jpg" alt="카카오톡 채널">
+            </div>
+            <div class="nav-item">
+                <img src="./image/profile.png" alt="프로필">
+            </div>
+            <div class="nav-item" onclick="location.href='/landing.html'">
+                <img src="./image/logout.png" alt="로그아웃">
+            </div>
+        </div>
+        <div class="hamburger-menu">
+            <div class="hamburger-icon"></div>
+        </div>
+    </header>
+    
+    <!-- 모바일 내비게이션 -->
+    <div class="mobile-nav">
+        <div class="mobile-nav-item">
+            <img src="./image/naver-cafe.png" alt="네이버 카페">
+            <span class="mobile-nav-text">네이버 카페</span>
+        </div>
+        <div class="mobile-nav-item">
+            <img src="./image/kakaotalk-channel.jpg" alt="카카오톡 채널">
+            <span class="mobile-nav-text">카카오톡 채널</span>
+        </div>
+        <div class="mobile-nav-item">
+            <img src="./image/profile.png" alt="프로필">
+            <span class="mobile-nav-text">프로필</span>
+        </div>
+        <div class="mobile-nav-item">
+            <img src="./image/logout.png" alt="로그아웃">
+            <span class="mobile-nav-text">로그아웃</span>
+        </div>
+    </div>
+    
+    <!-- 오버레이 -->
+    <div class="overlay"></div>
+    
+    <div class="main-layout">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                O주차 멘토링 신청
+                <div class="sidebar-period">(2025. 9. 15~ 9. 19.)</div>
+            </div>
+            <div class="sidebar-menu">
+                <div class="sidebar-item active" onclick="location.href='/notice.html'">Notice</div>
+                <div class="sidebar-item" onclick="location.href='/mentor-schedule.html'">멘토 스케줄</div>
+                <div class="sidebar-item" onclick="location.href='/mentoring-application.html'">멘토링 신청</div>
+                <div class="sidebar-item" onclick="location.href='/mentoring-status.html'">신청내역 열람/취소</div>
+            </div>
+        </div>
+        
+        <!-- Content Area -->
+        <div class="content-area">
+            <div class="content-header">
+                <h1 class="page-title">Notice</h1>
+                <div class="server-time" id="serverTime">11:59:08</div>
+            </div>
+            
+            <div class="content-box">
+                <div class="content-text">
+                    각종 공지사항들...<br>
+                    멘토 스케줄, 장소 확인 필수
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2025 이음. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // 서버 시간 업데이트
+        function updateServerTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('ko-KR', {
+                hour12: false,
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            document.getElementById('serverTime').textContent = timeString;
+        }
+        
+        // 1초마다 시간 업데이트
+        setInterval(updateServerTime, 1000);
+        updateServerTime(); // 초기 실행
+        
+        // 사이드바 메뉴 클릭 이벤트
+        document.querySelectorAll('.sidebar-item').forEach(item => {
+            item.addEventListener('click', function() {
+                // 모든 항목에서 active 클래스 제거
+                document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+                // 클릭된 항목에 active 클래스 추가
+                this.classList.add('active');
+                
+                alert(`${this.textContent} 페이지로 이동합니다.`);
+            });
+        });
+        
+        // 햄버거 메뉴 이벤트
+        const hamburgerMenu = document.querySelector('.hamburger-menu');
+        const mobileNav = document.querySelector('.mobile-nav');
+        const overlay = document.querySelector('.overlay');
+        
+        if (hamburgerMenu) {
+            hamburgerMenu.addEventListener('click', function() {
+                hamburgerMenu.classList.toggle('active');
+                mobileNav.classList.toggle('active');
+                overlay.classList.toggle('active');
+                document.body.style.overflow = mobileNav.classList.contains('active') ? 'hidden' : '';
+            });
+        }
+        
+        // 오버레이 클릭 이벤트
+        if (overlay) {
+            overlay.addEventListener('click', function() {
+                hamburgerMenu.classList.remove('active');
+                mobileNav.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        }
+        
+        // 모바일 내비게이션 아이템 클릭 이벤트
+        document.querySelectorAll('.mobile-nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                if (hamburgerMenu) {
+                    hamburgerMenu.classList.remove('active');
+                }
+                if (mobileNav) {
+                    mobileNav.classList.remove('active');
+                }
+                if (overlay) {
+                    overlay.classList.remove('active');
+                }
+                document.body.style.overflow = '';
+                
+                alert(`${this.querySelector('.mobile-nav-text').textContent} 페이지로 이동합니다.`);
+            });
+        });
+    </script>
+</body>
+</html>

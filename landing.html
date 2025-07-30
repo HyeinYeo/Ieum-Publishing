@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>이음 - 사람을 잇다</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap');
+        
+        :root {
+            --primary-color: #7ECCC2;
+            --secondary-color: #333333;
+            --light-bg: #E5F6F4;
+            --accent-color: #FFD600;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: var(--light-bg);
+            height: 100vh;
+            min-height: 480px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100%;
+        }
+        
+        /* Footer */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 10px 0;
+            text-align: center;
+            font-size: 12px;
+            color: rgba(51, 51, 51, 0.7);
+            z-index: 10;
+            background-color: rgba(229, 246, 244, 0.7);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+        
+        .footer p {
+            margin: 0;
+            font-weight: 300;
+        }
+        
+        /* Decorative Background Elements */
+        .bg-circle {
+            position: absolute;
+            border-radius: 50%;
+            background: var(--primary-color);
+            opacity: 0.2;
+            z-index: 1;
+        }
+        
+        .bg-circle-1 {
+            width: 600px;
+            height: 600px;
+            top: -200px;
+            right: -200px;
+            animation: float 15s ease-in-out infinite;
+        }
+        
+        .bg-circle-2 {
+            width: 400px;
+            height: 400px;
+            bottom: -150px;
+            left: -150px;
+            animation: float 20s ease-in-out infinite reverse;
+        }
+        
+        .bg-circle-3 {
+            width: 200px;
+            height: 200px;
+            top: 20%;
+            left: 15%;
+            opacity: 0.15;
+            animation: float 10s ease-in-out infinite 2s;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translate(0, 0);
+            }
+            50% {
+                transform: translate(20px, -20px);
+            }
+            100% {
+                transform: translate(0, 0);
+            }
+        }
+        
+        /* Logo Styles */
+        .logo-container {
+            margin-bottom: 30px;
+            animation: fadeIn 1.2s ease forwards;
+        }
+        
+        .logo {
+            width: 120px;
+            height: auto;
+            margin-bottom: 10px;
+            object-fit: contain;
+        }
+        
+        .brand-text {
+            margin-top: 10px;
+        }
+        
+        .brand-title {
+            font-size: 42px;
+            font-weight: 700;
+            color: var(--secondary-color);
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+        }
+        
+        .brand-subtitle {
+            font-size: 18px;
+            font-weight: 300;
+            color: var(--secondary-color);
+            letter-spacing: 2px;
+        }
+        
+        /* Login Button */
+        .login-btn {
+            display: inline-block;
+            margin-top: 30px;
+            transition: all 0.3s ease;
+            animation: fadeIn 1.5s ease forwards 0.5s;
+            opacity: 0;
+            border: none;
+            background: none;
+            padding: 0;
+            cursor: pointer;
+        }
+        
+        .login-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .kakao-login-img {
+            max-width: 300px;
+            height: auto;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.05));
+            transition: all 0.3s ease;
+        }
+        
+        .login-btn:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 10px 25px rgba(255, 214, 0, 0.4);
+        }
+        
+        .login-btn:active {
+            transform: translateY(-2px);
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .brand-title {
+                font-size: 34px;
+            }
+            
+            .brand-subtitle {
+                font-size: 16px;
+            }
+            
+            .login-btn-container {
+                margin-top: 20px;
+            }
+            
+            .kakao-login-img {
+                max-width: 280px;
+            }
+            
+            .bg-circle-1 {
+                width: 300px;
+                height: 300px;
+            }
+            
+            .bg-circle-2 {
+                width: 200px;
+                height: 200px;
+            }
+            
+            .logo {
+                width: 100px;
+            }
+            
+            .logo-container {
+                margin-bottom: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .brand-title {
+                font-size: 35px;
+            }
+            
+            .brand-subtitle {
+                font-size: 16px;
+            }
+            
+            .login-btn {
+                margin-top: 25px;
+            }
+            
+            .kakao-login-img {
+                max-width: 300px;
+            }
+            
+            .footer {
+                padding: 8px 0;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Elements -->
+    <div class="bg-circle bg-circle-1"></div>
+    <div class="bg-circle bg-circle-2"></div>
+    <div class="bg-circle bg-circle-3"></div>
+    
+    <div class="container">
+        <!-- Logo -->
+        <div class="logo-container">
+            <img src="./image/symbol.png" alt="이음 로고" class="logo">
+            
+            <div class="brand-text">
+                <h1 class="brand-title">[ 이;음 ]</h1>
+                <p class="brand-subtitle">사람을 잇다</p>
+            </div>
+        </div>
+        
+        <!-- Login Button -->
+        <div class="login-btn-container">
+            <a href="./register.html" class="login-btn">
+                <img src="./image/kakao_login.png" alt="카카오 로그인" class="kakao-login-img">
+            </a>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2025 이음. All rights reserved.</p>
+    </footer>
+    
+    <script>
+        // Simple animation to make background elements more dynamic
+        document.addEventListener('mousemove', function(e) {
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            
+            document.querySelectorAll('.bg-circle').forEach(circle => {
+                const speed = parseFloat(circle.getAttribute('data-speed') || 0.05);
+                const offsetX = (x - 0.5) * speed * 50;
+                const offsetY = (y - 0.5) * speed * 50;
+                
+                circle.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+            });
+        });
+        
+        // Set random data-speed attributes to circles for varying movement
+        document.querySelectorAll('.bg-circle').forEach(circle => {
+            circle.setAttribute('data-speed', (Math.random() * 0.05 + 0.02).toFixed(3));
+        });
+        
+        // Ensure everything stays centered on window resize
+        window.addEventListener('resize', function() {
+            document.querySelectorAll('.bg-circle').forEach(circle => {
+                // Reset transforms on resize
+                circle.style.transform = 'translate(0, 0)';
+            });
+        });
+    </script>
+</body>
+</html>
