@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>이음 - About Us</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap');
+
+        :root {
+            --primary-color: #7ECCC2;
+            --secondary-color: #333333;
+            --light-bg: #E5F6F4;
+            --accent-color: #FFD600;
+            --white: #ffffff;
+            --text-gray: #666666;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            width: 100%;
+            min-height: 100%;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--secondary-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+            padding-bottom: 60px;
+            width: 100%;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Navigation Header */
+        .nav-header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px 0;
+            background: transparent;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            margin-right: 30px;
+            /*padding: 0 0px;*/
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .nav-link {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* Decorative Background Elements */
+        .bg-circle {
+            position: fixed;
+            border-radius: 50%;
+            background: var(--primary-color);
+            opacity: 0.15;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .bg-circle-1 {
+            width: 800px;
+            height: 800px;
+            top: -200px;
+            right: -300px;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .bg-circle-2 {
+            width: 600px;
+            height: 600px;
+            bottom: -200px;
+            left: -250px;
+            animation: float 25s ease-in-out infinite reverse;
+        }
+
+        .bg-circle-3 {
+            width: 400px;
+            height: 400px;
+            top: 30%;
+            left: 10%;
+            opacity: 0.08;
+            animation: float 15s ease-in-out infinite 3s;
+        }
+
+        .bg-circle-4 {
+            width: 300px;
+            height: 300px;
+            top: 60%;
+            right: 5%;
+            opacity: 0.1;
+            animation: float 18s ease-in-out infinite 1s;
+        }
+
+        .bg-circle-5 {
+            width: 200px;
+            height: 200px;
+            top: 80%;
+            left: 70%;
+            opacity: 0.12;
+            animation: float 12s ease-in-out infinite 2s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            33% {
+                transform: translate(30px, -30px) rotate(120deg);
+            }
+            66% {
+                transform: translate(-20px, 20px) rotate(240deg);
+            }
+            100% {
+                transform: translate(0, 0) rotate(360deg);
+            }
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 0;
+            position: relative;
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            position: relative;
+            padding: 120px 0;
+            text-align: center;
+            overflow: hidden;
+            background: linear-gradient(135deg, var(--light-bg) 0%, rgba(126, 204, 194, 0.05) 50%, var(--light-bg) 100%);
+            width: 100%;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 20%, rgba(126, 204, 194, 0.1) 0%, transparent 50%),
+            radial-gradient(circle at 70% 80%, rgba(255, 214, 0, 0.05) 0%, transparent 50%);
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero-subtitle {
+            font-size: 20px;
+            font-weight: 300;
+            color: var(--text-gray);
+            margin-bottom: 40px;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+
+        .hero-description {
+            font-size: 16px;
+            line-height: 1.8;
+            color: var(--text-gray);
+            animation: fadeInUp 1s ease 0.4s both;
+            margin-bottom: 30px;
+        }
+
+        .hero-cta {
+            animation: fadeInUp 1s ease 0.6s both;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 15px 30px;
+            background: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(126, 204, 194, 0.3);
+        }
+
+        .cta-button:hover {
+            background: #6BB8AD;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(126, 204, 194, 0.4);
+        }
+
+        /* Section Styles */
+        .section {
+            padding: 80px 0;
+            width: 100%;
+            position: relative;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: 36px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: var(--primary-color);
+        }
+
+        /* Mission Section */
+        .mission-section {
+            background: var(--white);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mission-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 80% 20%, rgba(126, 204, 194, 0.03) 0%, transparent 60%);
+            z-index: 1;
+        }
+
+        .mission-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-top: 40px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .mission-card {
+            text-align: center;
+            padding: 40px 30px;
+            border-radius: 20px;
+            background: var(--light-bg);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .mission-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(126, 204, 194, 0.2);
+        }
+
+        .mission-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 32px;
+            color: white;
+        }
+
+        .mission-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .mission-text {
+            font-size: 14px;
+            color: var(--text-gray);
+            line-height: 1.6;
+        }
+
+        /* Timeline Section */
+        .timeline-section {
+            background: linear-gradient(135deg, var(--light-bg) 0%, rgba(126, 204, 194, 0.05) 50%, var(--light-bg) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .timeline-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                    radial-gradient(circle at 20% 30%, rgba(126, 204, 194, 0.08) 0%, transparent 40%),
+                    radial-gradient(circle at 80% 70%, rgba(255, 214, 0, 0.05) 0%, transparent 40%);
+            z-index: 1;
+        }
+
+        .timeline {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+            z-index: 10;
+            padding: 40px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--primary-color), #6BB8AD, var(--primary-color));
+            top: 0;
+            border-radius: 2px;
+            box-shadow: 0 0 10px rgba(126, 204, 194, 0.3);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 60px;
+            width: 50%;
+            padding: 20px;
+        }
+
+        .timeline-item:nth-child(odd) {
+            left: 0;
+            padding-right: 60px;
+        }
+
+        .timeline-item:nth-child(even) {
+            left: 50%;
+            padding-left: 60px;
+        }
+
+        .timeline-content {
+            background: var(--white);
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(126, 204, 194, 0.15);
+            position: relative;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            min-height: 110px;
+        }
+
+        .timeline-content:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(126, 204, 194, 0.25);
+            border-color: var(--primary-color);
+        }
+
+        /* 홀수 번째 (왼쪽) - 아이콘을 오른쪽에 */
+        .timeline-item:nth-child(odd) .timeline-content {
+            flex-direction: row-reverse;
+            text-align: right;
+        }
+
+        /* 짝수 번째 (오른쪽) - 아이콘을 왼쪽에 */
+        .timeline-item:nth-child(even) .timeline-content {
+            flex-direction: row;
+            text-align: left;
+        }
+
+        .timeline-item:nth-child(odd) .timeline-content::after {
+            content: '';
+            position: absolute;
+            right: -15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-left: 15px solid var(--white);
+            border-top: 15px solid transparent;
+            border-bottom: 15px solid transparent;
+        }
+
+        .timeline-item:nth-child(even) .timeline-content::after {
+            content: '';
+            position: absolute;
+            left: -15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-right: 15px solid var(--white);
+            border-top: 15px solid transparent;
+            border-bottom: 15px solid transparent;
+        }
+
+        .timeline-date {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary-color), #6BB8AD);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 16px;
+            box-shadow: 0 0 0 4px var(--white), 0 8px 20px rgba(126, 204, 194, 0.3);
+            z-index: 10;
+        }
+
+        .timeline-item:nth-child(odd) .timeline-date {
+            right: -40px;
+        }
+
+        .timeline-item:nth-child(even) .timeline-date {
+            left: -40px;
+        }
+
+        .timeline-year {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .timeline-generation-short {
+            font-size: 10px;
+            opacity: 0.9;
+            margin-top: 2px;
+        }
+
+        .timeline-icon {
+            width: 70px;
+            height: 70px;
+            background: transparent;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .timeline-text-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .timeline-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--secondary-color);
+        }
+
+        .timeline-keyword {
+            font-size: 24px;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary-color), #6BB8AD);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+            line-height: 1.2;
+        }
+
+        /* Values Section */
+        .values-section {
+            background: var(--white);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .values-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 90% 10%, rgba(126, 204, 194, 0.04) 0%, transparent 60%);
+            z-index: 1;
+        }
+
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .value-item {
+            padding: 30px;
+            text-align: center;
+            border: 2px solid var(--light-bg);
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .value-item:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-5px);
+        }
+
+        .value-number {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .value-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .value-text {
+            font-size: 14px;
+            color: var(--text-gray);
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 10px 0;
+            text-align: center;
+            font-size: 12px;
+            color: rgba(51, 51, 51, 0.7);
+            z-index: 1000;
+            background-color: transparent;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+
+        .footer p {
+            margin: 0;
+            font-weight: 300;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-container {
+                padding: 0 15px;
+                gap: 20px;
+            }
+
+            .nav-link {
+                font-size: 14px;
+            }
+
+            .hero-title {
+                font-size: 32px;
+            }
+
+            .hero-subtitle {
+                font-size: 18px;
+            }
+
+            .section-title {
+                font-size: 28px;
+            }
+
+            .mission-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .timeline::before {
+                left: 20px;
+            }
+
+            .timeline-item {
+                width: 100%;
+                left: 0 !important;
+                padding-left: 80px !important;
+                padding-right: 20px !important;
+            }
+
+            .timeline-content {
+                flex-direction: column !important;
+                text-align: center !important;
+                gap: 15px;
+                padding: 20px;
+            }
+
+            .timeline-item .timeline-date {
+                left: -20px !important;
+                right: auto !important;
+                width: 60px;
+                height: 60px;
+            }
+
+            .timeline-date .timeline-year {
+                font-size: 12px;
+            }
+
+            .timeline-date .timeline-generation-short {
+                font-size: 8px;
+            }
+
+            .timeline-content::after {
+                display: none !important;
+            }
+
+            .timeline-icon {
+                width: 50px;
+                height: 50px;
+                font-size: 24px;
+            }
+
+            .timeline-keyword {
+                font-size: 18px;
+            }
+
+            .values-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .bg-circle-1 {
+                width: 400px;
+                height: 400px;
+            }
+
+            .bg-circle-2 {
+                width: 300px;
+                height: 300px;
+            }
+
+            .bg-circle-3, .bg-circle-4, .bg-circle-5 {
+                width: 150px;
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- Navigation Header -->
+<header class="nav-header">
+    <div class="nav-container">
+        <a href="./landing.html" class="nav-link">홈으로</a>
+        <a href="./about-mentors.html" class="nav-link">멘토단 소개</a>
+    </div>
+</header>
+
+<!-- Background Elements -->
+<div class="bg-circle bg-circle-1"></div>
+<div class="bg-circle bg-circle-2"></div>
+<div class="bg-circle bg-circle-3"></div>
+<div class="bg-circle bg-circle-4"></div>
+<div class="bg-circle bg-circle-5"></div>
+
+<!-- Main Content -->
+<main class="main-content">
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-bg"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">[ 이;음 ]</h1>
+            <p class="hero-subtitle">사람을 잇다</p>
+            <p class="hero-description">
+                합격자와 당신을 잇다, 면접을 잇다 <br>
+                5급 공채 합격자들의 순수한 봉사정신으로 운영되는 3차 면접 대비 멘토링 프로그램입니다
+            </p>
+        </div>
+    </section>
+
+    <!-- Mission Section -->
+    <section class="section mission-section">
+        <div class="container">
+            <h2 class="section-title fade-in">핵심 가치</h2>
+            <div class="mission-grid">
+                <div class="mission-card fade-in">
+                    <div class="mission-icon">🤝</div>
+                    <h3 class="mission-title">연결</h3>
+                    <p class="mission-text">합격자와 면접 준비생을 이어, 경험과 노하우를 나누고 실전 면접 역량을 강화합니다.</p>
+                </div>
+                <div class="mission-card fade-in">
+                    <div class="mission-icon">💡</div>
+                    <h3 class="mission-title">전문성</h3>
+                    <p class="mission-text">합격자의 실제 면접 경험을 기반으로 체계적인 모의면접과 맞춤 피드백을 제공합니다.</p>
+                </div>
+                <div class="mission-card fade-in">
+                    <div class="mission-icon">❤️</div>
+                    <h3 class="mission-title">봉사정신</h3>
+                    <p class="mission-text">어떠한 영리적 목적이나 후원 없이 합격자들의 순수한 봉사정신으로 운영되며, 면접 준비생의 어려움을 함께합니다.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Timeline Section -->
+    <section class="section timeline-section">
+        <div class="container">
+            <h2 class="section-title fade-in">우리의 여정</h2>
+            <div class="timeline">
+                <div class="timeline-item fade-in">
+                    <div class="timeline-content">
+                        <div class="timeline-icon">🌱</div>
+                        <div class="timeline-text-content">
+                            <h3 class="timeline-title">이음 1기</h3>
+                            <div class="timeline-keyword">시작의 발걸음</div>
+                        </div>
+                    </div>
+                    <div class="timeline-date">
+                        <div class="timeline-year">2020</div>
+                        <div class="timeline-generation-short">1기</div>
+                    </div>
+                </div>
+                <div class="timeline-item fade-in">
+                    <div class="timeline-content">
+                        <div class="timeline-icon">🏗️</div>
+                        <div class="timeline-text-content">
+                            <h3 class="timeline-title">이음 2기</h3>
+                            <div class="timeline-keyword">기반 다지기</div>
+                        </div>
+                    </div>
+                    <div class="timeline-date">
+                        <div class="timeline-year">2021</div>
+                        <div class="timeline-generation-short">2기</div>
+                    </div>
+                </div>
+                <div class="timeline-item fade-in">
+                    <div class="timeline-content">
+                        <div class="timeline-icon">📈</div>
+                        <div class="timeline-text-content">
+                            <h3 class="timeline-title">이음 3기</h3>
+                            <div class="timeline-keyword">확장과 성장</div>
+                        </div>
+                    </div>
+                    <div class="timeline-date">
+                        <div class="timeline-year">2022</div>
+                        <div class="timeline-generation-short">3기</div>
+                    </div>
+                </div>
+                <div class="timeline-item fade-in">
+                    <div class="timeline-content">
+                        <div class="timeline-icon">⚙️</div>
+                        <div class="timeline-text-content">
+                            <h3 class="timeline-title">이음 4기</h3>
+                            <div class="timeline-keyword">체계화</div>
+                        </div>
+                    </div>
+                    <div class="timeline-date">
+                        <div class="timeline-year">2023</div>
+                        <div class="timeline-generation-short">4기</div>
+                    </div>
+                </div>
+                <div class="timeline-item fade-in">
+                    <div class="timeline-content">
+                        <div class="timeline-icon">⚖️</div>
+                        <div class="timeline-text-content">
+                            <h3 class="timeline-title">이음 5기</h3>
+                            <div class="timeline-keyword">안정화</div>
+                        </div>
+                    </div>
+                    <div class="timeline-date">
+                        <div class="timeline-year">2024</div>
+                        <div class="timeline-generation-short">5기</div>
+                    </div>
+                </div>
+                <div class="timeline-item fade-in">
+                    <div class="timeline-content">
+                        <div class="timeline-icon">🚀</div>
+                        <div class="timeline-text-content">
+                            <h3 class="timeline-title">이음 6기</h3>
+                            <div class="timeline-keyword">디지털 혁신</div>
+                        </div>
+                    </div>
+                    <div class="timeline-date">
+                        <div class="timeline-year">2025</div>
+                        <div class="timeline-generation-short">6기</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<!-- Footer -->
+<footer class="footer">
+    <p>&copy; 2025 이음. All rights reserved.</p>
+</footer>
+
+<script>
+    // 초기 로딩 시 레이아웃 안정화
+    document.addEventListener('DOMContentLoaded', function() {
+        // 스크롤 위치 초기화
+        window.scrollTo(0, 0);
+
+        // 레이아웃 강제 재계산
+        document.body.style.display = 'none';
+        document.body.offsetHeight; // 강제 reflow
+        document.body.style.display = '';
+    });
+
+    // 마우스 움직임에 따른 배경 요소 애니메이션 (최적화)
+    let mouseX = 0;
+    let mouseY = 0;
+    let ticking = false;
+
+    function updateBackgroundElements() {
+        const x = mouseX / window.innerWidth;
+        const y = mouseY / window.innerHeight;
+
+        document.querySelectorAll('.bg-circle').forEach((circle, index) => {
+            const speed = 0.01 + (index * 0.005);
+            const offsetX = (x - 0.5) * speed * 30;
+            const offsetY = (y - 0.5) * speed * 30;
+
+            circle.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+        });
+
+        ticking = false;
+    }
+
+    document.addEventListener('mousemove', function(e) {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+
+        if (!ticking) {
+            requestAnimationFrame(updateBackgroundElements);
+            ticking = true;
+        }
+    });
+
+    // 스크롤 애니메이션
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, observerOptions);
+
+    // fade-in 요소들 관찰
+    document.querySelectorAll('.fade-in').forEach(el => {
+        observer.observe(el);
+    });
+
+    // 스무스 스크롤
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+
+    // 창 크기 변경 시 레이아웃 재조정
+    window.addEventListener('resize', function() {
+        // 디바운싱을 위한 타이머
+        clearTimeout(window.resizeTimer);
+        window.resizeTimer = setTimeout(function() {
+            // 레이아웃 강제 재계산
+            document.body.style.display = 'none';
+            document.body.offsetHeight;
+            document.body.style.display = '';
+        }, 250);
+    });
+</script>
+</body>
+</html>
